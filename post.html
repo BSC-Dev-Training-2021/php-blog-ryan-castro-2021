@@ -6,9 +6,12 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Blog Post - Start Bootstrap Template</title>
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/app.js"></script>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
+        <link href="css/font-awesome.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
     </head>
     <body>
@@ -22,6 +25,7 @@
                         <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                        <li class="nav-item"><a class="nav-link" href="messages.html">Messages</a></li>
                         <li class="nav-item"><a class="nav-link" href="post.html">Post</a></li>
                     </ul>
                 </div>
@@ -44,10 +48,60 @@
                             <section class="mb-5">
                                 <form>
                                     <div class="form-group">
+                                        <label for="exampleFormControlTextarea1" class="mb-1">Title</label>
+                                        <input type="text" class="form-control mb-1">
+                                    </div>
+                                    <div class="form-group">
                                         <label for="exampleFormControlTextarea1" class="mb-1">Message</label>
                                         <textarea class="form-control mb-1" id="exampleFormControlTextarea1" rows="5"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-2">Post</button>
+                                    <div class="form-group">
+                                        <label class="mb-1 mt-3">Categories</label>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                      Default checkbox
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                      Default checkbox
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                      Default checkbox
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                      Default checkbox
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                        Default checkbox
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" value="" id="defaultCheck1">
+                                                    <label class="form-check-label" for="defaultCheck1">
+                                                        Default checkbox
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <button type="submit" class="btn btn-primary mt-5">Post</button>
                                 </form>
                             </section>
                         </div>
