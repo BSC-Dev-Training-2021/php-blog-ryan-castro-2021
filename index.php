@@ -7,6 +7,11 @@ $data = new Database('');
 
 $data->select_feature_post();
 
+if(empty($_SESSION['$post_data']))
+{
+    header('Location: post.php'); 
+}
+
 foreach($_SESSION['$post_data'] as $post_info){
 
     $post_title = $post_info["title"];
