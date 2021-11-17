@@ -1,22 +1,18 @@
 <?php
-if (!session_status() == PHP_SESSION_ACTIVE) {
-    session_start();
-}
 require_once ('controller/class.php');
 $data = new Database('');
 
-$data->select_user_info();
+$categories = $data->select_categories();
 
 
 if (isset($_POST['submit']))
-{
-    $data->insert_post();
-    
-    header('Location: index.php'); 
-}
+{   
+    if (count($_POST['categories']) != 0 ){
 
-if (session_status() == PHP_SESSION_ACTIVE) {
-    session_destroy();
+        $data->insert_post();
+        header('Location: index.php'); 
+    }
+    
 }
 ?>
 <!DOCTYPE html>
@@ -83,46 +79,18 @@ if (session_status() == PHP_SESSION_ACTIVE) {
                                     <div class="form-group">
                                         <label class="mb-1 mt-3">Categories</label>
                                         <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="web_design_cbox" type="checkbox" value="1" id="defaultCheck1">
-                                                    <label class="form-check-label" for="defaultCheck1">
-                                                      Web Design
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="html_cbox" type="checkbox" value="2" id="defaultCheck2">
-                                                    <label class="form-check-label" for="defaultCheck2">
-                                                      HTML
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="javascript_cbox" type="checkbox" value="3" id="defaultCheck3">
-                                                    <label class="form-check-label" for="defaultCheck3">
-                                                      Javascript
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="css_cbox" type="checkbox" value="4" id="defaultCheck4">
-                                                    <label class="form-check-label" for="defaultCheck4">
-                                                        CSS
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="tutorials_cbox" type="checkbox" value="5" id="defaultCheck5">
-                                                    <label class="form-check-label" for="defaultCheck5">
-                                                        Tutorials
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input class="form-check-input" name="freebies_cbox" type="checkbox" value="6" id="defaultCheck6">
-                                                    <label class="form-check-label" for="defaultCheck6">
-                                                        Freebies
-                                                    </label>
-                                                </div>
-                                            </div>
+                                            <?php 
+                                            for ($a=0; $a < count($categories); $a++){
+                                                echo '<div class="col-lg-6">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" name="categories[]" type="checkbox" value="'. $categories[$a]['id'] .'" id="defaultCheck1">
+                                                            <label class="form-check-label" for="defaultCheck1">
+                                                            '. $categories[$a]['name'] .'<br />
+                                                            </label>
+                                                        </div>
+                                                    </div>';
+                                            }
+                                            ?>
                                         </div>
                                     </div>
                                     

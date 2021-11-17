@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 16, 2021 at 07:54 AM
+-- Generation Time: Nov 17, 2021 at 06:41 AM
 -- Server version: 10.4.21-MariaDB
 -- PHP Version: 8.0.12
 
@@ -43,9 +43,12 @@ CREATE TABLE `blog_post` (
 --
 
 INSERT INTO `blog_post` (`id`, `contents`, `title`, `descriptions`, `img_links`, `created_by`, `created`, `updated`) VALUES
-(25, 'human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.', 'Lorem ipsum dolor', 'Science is an enterprise that should be cherished as an activity of the free \r,', NULL, 1, '2021-11-16 07:47:23', NULL),
-(26, 'Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.', 'Lorem ipsum dolor', 'Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.', NULL, 1, '2021-11-16 07:52:05', NULL),
-(27, 'Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.\r,\r,Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.', 'Lorem ipsum dolor', 'Science is an enterprise that should be cherished as an activity of the free human mind. Because it transforms who we are, how we live, and it gives us an understanding of our place in the universe.\r,\r,', NULL, 1, '2021-11-16 07:53:47', NULL);
+(1, 'Welcome to Blog Post!Welcome to Blog Post!Welcome to Blog Post!\r\n\r\nWelcome to Blog Post!Welcome to Blog Post!Welcome to Blog Post!\r\n\r\nWelcome to Blog Post!Welcome to Blog Post!Welcome to Blog Post!\r\n\r\nWelcome to Blog Post!Welcome to Blog Post!Welcome to Blog Post!', 'Welcome to Blog Post!', 'Welcome to Blog Post!Welcome to Blog Post!\r\nWelcome to Blog Post!Welcome to Blog Post!\r\nWelcome to Blog Post!Welcome to Blog Post!\r\nWelcome to Blog Post!Welcome to Blog Post!', NULL, 1, '2021-11-17 04:00:57', NULL),
+(2, 'Welcome to Blog Post!\r\nWelcome to Blog Post!\r\nWelcome to Blog Post!\r\n', 'Welcome to Blog Post!', 'Welcome to Blog Post!\r\nWelcome to Blog Post!', NULL, 1, '2021-11-17 04:36:09', NULL),
+(3, 'Welcome to Blog Post!Welcome to Blog Post!\r\n\r\nWelcome to Blog Post!Welcome to Blog Post!', 'Welcome to Blog Post!', 'Welcome to Blog Post!\r\n\r\nWelcome to Blog Post!', NULL, 1, '2021-11-17 04:43:41', NULL),
+(4, 'ewqeqweqwe \r\n\r\nqwe\r\nqw \r\nqwe \r\nqe\r\n\r\neqw', 'Welcome to Blog Post!', 'qwewqewq', NULL, 1, '2021-11-17 05:14:39', NULL),
+(5, 'eqweqweqweq', 'Welcome to Blog Post!', 'qweqweqw', NULL, 1, '2021-11-17 06:31:01', NULL),
+(6, 'Welcome to Blog Post!\r\n\r\nWelcome to Blog Post!\r\n\r\nWelcome to Blog Post!\r\n\r\nWelcome to Blog Post!\r\n\r\nWelcome to Blog Post!\r\n\r\nWelcome to Blog Post!', 'Welcome to Blog Post!', 'Welcome to Blog Post!\r\n\r\nWelcome to Blog Post!\r\n\r\nWelcome to Blog Post!', NULL, 1, '2021-11-17 06:39:03', NULL);
 
 -- --------------------------------------------------------
 
@@ -63,20 +66,20 @@ CREATE TABLE `blog_post_categories` (
 --
 
 INSERT INTO `blog_post_categories` (`blog_post_id`, `category_id`) VALUES
-(25, 2),
-(25, 3),
-(25, 4),
-(25, 5),
-(26, 1),
-(26, 2),
-(26, 3),
-(26, 5),
-(27, 1),
-(27, 2),
-(27, 3),
-(27, 4),
-(27, 5),
-(27, 6);
+(1, 1),
+(1, 3),
+(2, 3),
+(2, 4),
+(3, 2),
+(3, 4),
+(4, 1),
+(4, 4),
+(5, 3),
+(5, 6),
+(6, 1),
+(6, 3),
+(6, 4),
+(6, 5);
 
 -- --------------------------------------------------------
 
@@ -86,12 +89,24 @@ INSERT INTO `blog_post_categories` (`blog_post_id`, `category_id`) VALUES
 
 CREATE TABLE `blog_post_comment` (
   `id` int(50) NOT NULL,
-  `comment` text NOT NULL,
+  `comment` longtext NOT NULL,
   `user_id` int(50) NOT NULL,
   `blog_post_id` int(50) NOT NULL,
   `created` datetime DEFAULT NULL,
   `updated` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `blog_post_comment`
+--
+
+INSERT INTO `blog_post_comment` (`id`, `comment`, `user_id`, `blog_post_id`, `created`, `updated`) VALUES
+(1, 'qweqwewqeqweqwe\r\nwqqwe', 1, 4, '2021-11-17 06:17:03', NULL),
+(2, 'qkecqwvwei \r\nqwlekjqwe', 1, 4, '2021-11-17 06:28:16', NULL),
+(3, 'iquyeashdkj', 1, 5, '2021-11-17 06:31:07', NULL),
+(4, 'owieurqowruq', 1, 5, '2021-11-17 06:37:54', NULL),
+(5, 'Welcome to Blog Post!', 1, 6, '2021-11-17 06:39:14', NULL),
+(6, 'Welcome to Blog Post!', 1, 6, '2021-11-17 06:39:16', NULL);
 
 -- --------------------------------------------------------
 
@@ -171,13 +186,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `blog_post`
 --
 ALTER TABLE `blog_post`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `blog_post_comment`
 --
 ALTER TABLE `blog_post_comment`
-  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(50) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `category_types`

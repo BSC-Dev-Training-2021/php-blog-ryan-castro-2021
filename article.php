@@ -1,21 +1,23 @@
 <?php 
-if (!session_status() == PHP_SESSION_ACTIVE) {
-    session_start();
-}
 require_once ('controller/class.php');
 $data = new Database('');
 
 if($_GET['articlepage']){
-    $data->article_info();
-    foreach($_SESSION['$article_info'] as $article_info){
+    $article_data = $data->article_info();
+    foreach($article_data as $article_info){
         $post_title = $article_info["title"];
-        $post_content = str_replace(',', '<br />', $article_info["contents"]);
+        $post_content = $article_info["contents"];
         $post_datetime = $article_info["created"];
         $post_name = $article_info["name"];
     }
 }
-else{
+else
+{
     header('Location: index.php'); 
+}
+
+if(isset($_POST['submit_comment'])){
+    $data->insert_comment();
 }
 
 ?>
@@ -67,14 +69,9 @@ else{
                             <!-- Post categories-->
                             <?php
                             
-                            $data->article_categories();
-                            foreach($_SESSION['$article_categories'] as $categories){
-                            $my_categories = $categories["name"];
-                            echo '<a class="badge bg-secondary text-decoration-none link-light" href="#!">'.$my_categories.'</a>';
-
-                            if (session_status() == PHP_SESSION_ACTIVE) {
-                                session_destroy();
-                            }
+                            $article_categories = $data->article_categories();
+                            foreach($article_categories as $categories){
+                            echo '<a class="badge bg-secondary text-decoration-none link-light" href="#!">'.$categories["name"].'</a> ';
                             }
                             ?>
                         </header>
@@ -82,7 +79,7 @@ else{
                         <figure class="mb-4"><img class="img-fluid rounded" src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." /></figure>
                         <!-- Post content-->
                         <section class="mb-5">
-                            <p class="fs-5 mb-4"><?php echo $post_content;?></p>
+                            <p class="fs-5 mb-4"><?php echo nl2br($post_content);?></p>
 
                             <h2 class="fw-bolder mb-4 mt-5">I have odd cosmic thoughts every day</h2>
                             <p class="fs-5 mb-4">For me, the most fascinating interface is Twitter. I have odd cosmic thoughts every day and I realized I could hold them to myself or share them with people who might be interested.</p>
@@ -94,47 +91,55 @@ else{
                         <div class="card bg-light">
                             <div class="card-body">
                                 <!-- Comment form-->
-                                <form class="mb-4">
+                                <form class="mb-4" method="post" action="article.php?articlepage=<?php echo $_GET['articlepage'];?>">
                                     <div>
-                                        <textarea class="form-control mb-2" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
+                                        <textarea class="form-control mb-2" name="comment_txt" rows="3" placeholder="Join the discussion and leave a comment!"></textarea>
                                     </div>
                                     <div>
-                                        <button type="submit" class="btn btn-primary">Post Comment</button>
+                                        <button type="submit" name="submit_comment" class="btn btn-primary">Post Comment</button>
                                     </div>
                                 </form>
-                                <!-- Comment with nested comments-->
-                                <div class="d-flex mb-4">
-                                    <!-- Parent comment-->
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
-                                        <!-- Child comment 1-->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                            <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
-                                                And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
-                                            </div>
-                                        </div>
-                                        <!-- Child comment 2-->
-                                        <div class="d-flex mt-4">
-                                            <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                            <div class="ms-3">
-                                                <div class="fw-bold">Commenter Name</div>
-                                                When you put money directly to a problem, it makes a good headline.
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                <?php 
+                                // <!-- Comment with nested comments-->
+                                // <div class="d-flex mb-4">
+                                //     <!-- Parent comment -->
+                                //     <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                //     <div class="ms-3">
+                                //         <div class="fw-bold">Commenter Name</div>
+                                //         If you're going to lead a space frontier, it has to be government; it'll never be private enterprise. Because the space frontier is dangerous, and it's expensive, and it has unquantified risks.
+                                //         <!-- Child comment 1-->
+                                //         <div class="d-flex mt-4">
+                                //             <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                //             <div class="ms-3">
+                                //                 <div class="fw-bold">Commenter Name</div>
+                                //                 And under those conditions, you cannot establish a capital-market evaluation of that enterprise. You can't get investors.
+                                //             </div>
+                                //         </div>
+                                //         <!-- Child comment 2-->
+                                //         <div class="d-flex mt-4">
+                                //             <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                //             <div class="ms-3">
+                                //                 <div class="fw-bold">Commenter Name</div>
+                                //                 When you put money directly to a problem, it makes a good headline.
+                                //             </div>
+                                //         </div>
+                                //     </div>
+                                // </div> 
+                                ?>
                                 <!-- Single comment-->
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
-                                    <div class="ms-3">
-                                        <div class="fw-bold">Commenter Name</div>
-                                        When I look at the universe and all the ways the universe wants to kill us, I find it hard to reconcile that with statements of beneficence.
-                                    </div>
-                                </div>
+                                <?php
+                                $my_comment = $data->select_comment();
+                                for ($a=0; $a<count($my_comment); $a++ ){
+                                    echo  
+                                    '<div class="d-flex">
+                                        <div class="flex-shrink-0"><img class="rounded-circle" src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+                                        <div class="ms-3">
+                                            <div class="fw-bold">'.$my_comment[$a]['name'].'</div>
+                                            <p>'.nl2br($my_comment[$a]['comment']).'</p>
+                                        </div>
+                                    </div>';
+                                }
+                                ?>
                             </div>
                         </div>
                     </section>

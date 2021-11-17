@@ -27,14 +27,15 @@ class Database {
     }
 
     public function select($column_name, $table_name ,$where, $condition, $limit){
-        $array = array();  
+        $arrays = array();  
         $query = "SELECT ". $column_name ." FROM ".$table_name." ".$where." ". $condition." ".$limit;
         $result = mysqli_query($this->con, $query);
         while($row = mysqli_fetch_assoc($result))
         {
-            $array[] = $row; 
+             $arrays[] = $row; 
+            
         }
-       return $array;
+       return $arrays;
     }
 
     public function delete($table_name, $where) {
@@ -127,106 +128,64 @@ class Database {
     public function select_user_info(){
         $data = new Database('users');
     
-        $users_data = $data->select('*',$data->tableName,'WHERE id=1','',''); 
+        return $data->select('*',$data->tableName,'WHERE id=1','','',''); 
 
-        foreach($users_data as $user){
-            $_SESSION['$my_id'] = $user["id"];
-            // $_SESSION['$my_name']= $user["name"]; 
+        // foreach($users_data as $user){
+        //     $_SESSION['$my_id'] = $user["id"];
+        //     // $_SESSION['$my_name']= $user["name"]; 
 
-        }
+        // }
+
+    }
+
+    public function select_categories(){
+        $data = new Database('category_types');
+    
+        return $data->select('*',$data->tableName,'','','',''); 
+
     }
 
 
     public function insert_post(){
-        if(!empty($_POST['web_design_cbox']) OR !empty($_POST['html_cbox']) OR !empty($_POST['css_cbox']) OR !empty($_POST['tutorials_cbox']) OR !empty($_POST['freebies_cbox']) OR !empty($_POST['javascript_cbox'])){
-
             $data = new Database('blog_post');
-            
-            $array = explode("\n", $_POST["blog_content_txt"]);
-            $content_array = array_unique($array);
-
-            $array = explode("\n", $_POST["blog_description_txt"]);
-            $desc_array = array_unique($array);
+        
+            $user_info = $data->select_user_info();
 
             $insert_data = array(
-                'contents' => implode(',', $content_array),
+                'contents' => $_POST["blog_content_txt"],
                 'title' => $_POST['blog_title_txt'],
-                'descriptions' => implode(',', $desc_array),
+                'descriptions' => $_POST["blog_description_txt"],
                 'created' => date('Y-m-d  H:i:s'),
-                'created_by' => $_SESSION['$my_id']
+                'created_by' => $user_info[0]['id']
             );
 
             if($data->insert($data->tableName , $insert_data)){
                 $data = new Database('blog_post');
-                $users_data = $data->select('id',$data->tableName,'ORDER BY id DESC','','LIMIT 1'); 
+                $post_info = $data->select('id',$data->tableName,'ORDER BY id DESC','','LIMIT 1',''); 
 
-                foreach($users_data as $user){
-                    $my_post_id = $user["id"];
-                }
-                
-                //insert category
+                $my_post_id = $post_info[0]["id"];
+
                 $data = new Database('blog_post_categories');
-
-                if(!empty($_POST['web_design_cbox'])) {
+                
+                for ($a=0; $a<count($_POST['categories']); $a++){
                     $insert_data = array(
-                        'blog_post_id' => $my_post_id,
-                        'category_id' => $_POST['web_design_cbox']
+                        'category_id' => $_POST['categories'][$a],
+                        'blog_post_id' => $my_post_id
                     );
                     $data->insert($data->tableName , $insert_data);
                 }
-
-                if(!empty($_POST['html_cbox'])) {
-                    $insert_data = array(
-                        'blog_post_id' => $my_post_id,
-                        'category_id' => $_POST['html_cbox']
-                    );
-                    $data->insert($data->tableName , $insert_data);
-                }
-
-                if(!empty($_POST['javascript_cbox'])) {
-                    $insert_data = array(
-                        'blog_post_id' => $my_post_id,
-                        'category_id' => $_POST['javascript_cbox']
-                    );
-                    $data->insert($data->tableName , $insert_data);
-                }
-
-                if(!empty($_POST['css_cbox'])) {
-                    $insert_data = array(
-                        'blog_post_id' => $my_post_id,
-                        'category_id' => $_POST['css_cbox']
-                    );
-                    $data->insert($data->tableName , $insert_data);
-                }
-
-                if(!empty($_POST['tutorials_cbox'])) {
-                    $insert_data = array(
-                        'blog_post_id' => $my_post_id,
-                        'category_id' => $_POST['tutorials_cbox']
-                    );
-                    $data->insert($data->tableName , $insert_data);
-                }
-
-                if(!empty($_POST['freebies_cbox'])) {
-                    $insert_data = array(
-                        'blog_post_id' => $my_post_id,
-                        'category_id' => $_POST['freebies_cbox']
-                    );
-                    $data->insert($data->tableName , $insert_data);
-                }
-                //end insert category
             }
             else
             {
                 echo 'Database Connection Error ' . mysqli_connect_error($this->con);
             }  
-        }
     }
 
     public function select_feature_post(){
         $data = new Database('blog_post');
         $column = "id, title, descriptions, created";
-        $_SESSION['$post_data'] = $data->select($column,$data->tableName,'','ORDER BY created DESC','Limit 1'); 
+
+        return $data->select($column,$data->tableName,'','ORDER BY created DESC','Limit 1',''); 
     }
 
 
@@ -240,11 +199,10 @@ class Database {
 
         $where = "WHERE blog_post.id = ". intval($_GET['articlepage']);
 
-        $_SESSION['$article_info'] = $data->select($column,$data->tableName,$innerjoin,$where,''); 
+        return $data->select($column,$data->tableName,$innerjoin,$where,'',''); 
     }
 
     public function article_categories(){
-
 
         $data = new Database('blog_post_categories');
 
@@ -254,7 +212,37 @@ class Database {
 
         $where = "WHERE blog_post_categories.blog_post_id = ". intval($_GET['articlepage']);
 
-        $_SESSION['$article_categories'] = $data->select($column,$data->tableName,$innerjoin,$where,''); 
+        return $data->select($column,$data->tableName,$innerjoin,$where,'',''); 
+    }
+
+    public function select_comment(){
+
+        $data = new Database('blog_post_comment');
+
+        $column = "blog_post_comment.comment , users.name ";
+
+        $innerjoin = "inner join users on blog_post_comment.user_id = users.id INNER join blog_post on blog_post_comment.blog_post_id = blog_post.id ";
+
+        $where = "where blog_post.id = ". intval($_GET['articlepage']);
+
+        $orderby = "ORDER BY blog_post_comment.id DESC";
+
+        return $data->select($column,$data->tableName,$innerjoin,$where,$orderby,''); 
+    }
+
+    public function insert_comment(){
+        $data = new Database('blog_post_comment');
+                      
+            $user_info = $data->select_user_info();
+
+            $insert_data = array(
+                'comment' => $_POST["comment_txt"],
+                'user_id' => $user_info[0]['id'],
+                'blog_post_id' => intval($_GET['articlepage']),
+                'created' => date('Y-m-d  H:i:s')
+            );
+
+        $data->insert($data->tableName , $insert_data);
     }
 
 } 

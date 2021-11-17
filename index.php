@@ -1,28 +1,15 @@
 <?php
-if (!session_status() == PHP_SESSION_ACTIVE) {
-    session_start();
-}
 require_once ('controller/class.php');
 $data = new Database('');
 
-$data->select_feature_post();
+$feature = $data->select_feature_post();
 
-if(empty($_SESSION['$post_data']))
+if(empty($feature))
 {
     header('Location: post.php'); 
 }
 
-foreach($_SESSION['$post_data'] as $post_info){
 
-    $post_title = $post_info["title"];
-    $post_desc = str_replace(',', '<br />', $post_info["descriptions"]);
-    $post_datetime = $post_info["created"];
-    $post_id = $post_info["id"];
-}
-
-if (session_status() == PHP_SESSION_ACTIVE) {
-    session_destroy();
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -75,14 +62,26 @@ if (session_status() == PHP_SESSION_ACTIVE) {
                     <div class="card mb-4">
                         <a href="#!"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg" alt="..." /></a>
                         <div class="card-body">
-                            <div class="small text-muted"><?php echo $post_datetime; ?></div>
-                            <h2 class="card-title"><?php echo $post_title; ?></h2>
-                            <p class="card-text"><?php echo $post_desc; ?></p>
-                            <a class="btn btn-primary" href="article.php?articlepage=<?php echo $post_id; ?>">Read more →</a>
+                            <?php
+                                $control = 1;
+                                foreach($feature as $post_info){
+                                    // $post_title = $post_info["title"];
+                                    // $post_desc = $post_info["descriptions"];
+                                    // $post_datetime = $post_info["created"];
+                                    // $post_id = $post_info["id"];
+                                        echo   
+                                        '<div class="small text-muted">'. $post_info["created"] .'</div>
+                                        <h2 class="card-title">'. $post_info["title"] .'</h2>
+                                        <p class="card-text">'.nl2br($post_info["descriptions"]).'</p>
+                                        <a class="btn btn-primary" href="article.php?articlepage='.$post_info["id"].'">Read more →</a>';
+                                }
+                        ?>
                         </div>
                     </div>
                     <!-- Nested row for non-featured blog posts-->
-                    <div class="row">
+                    <?php
+                     
+                    echo '<div class="row">
                         <div class="col-lg-6">
                             <!-- Blog post-->
                             <div class="card mb-4">
@@ -127,7 +126,9 @@ if (session_status() == PHP_SESSION_ACTIVE) {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div>';
+
+                    ?>
                     <!-- Pagination-->
                     <nav aria-label="Pagination">
                         <hr class="my-0" />
