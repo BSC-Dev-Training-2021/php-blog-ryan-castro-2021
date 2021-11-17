@@ -5,14 +5,20 @@ $data = new Database('');
 $categories = $data->select_categories();
 
 
-if (isset($_POST['submit']))
-{   
-    if (count($_POST['categories']) != 0 ){
-
+if (isset($_POST['submit'])){   
+    if (isset($_POST['categories'])){
         $data->insert_post();
         header('Location: index.php'); 
     }
-    
+    else{
+        echo '<script type="text/javascript">';
+        echo ' alert("Select at least 1 category!")';
+        echo '</script>';
+        
+        echo '<script>
+                window.history.back();
+              </script>';
+    }
 }
 ?>
 <!DOCTYPE html>

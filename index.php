@@ -1,13 +1,7 @@
 <?php
 require_once ('controller/class.php');
-$data = new Database('');
 
-$feature = $data->select_feature_post();
 
-if(empty($feature))
-{
-    header('Location: post.php'); 
-}
 
 
 ?>
@@ -63,72 +57,51 @@ if(empty($feature))
                         <a href="#!"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg" alt="..." /></a>
                         <div class="card-body">
                             <?php
-                                $control = 1;
-                                foreach($feature as $post_info){
-                                    // $post_title = $post_info["title"];
-                                    // $post_desc = $post_info["descriptions"];
-                                    // $post_datetime = $post_info["created"];
-                                    // $post_id = $post_info["id"];
+                                $data = new Database('');
+
+                                $feature = $data->select_feature_post();
+                                for ($a=0; $a<1; $a++){
                                         echo   
-                                        '<div class="small text-muted">'. $post_info["created"] .'</div>
-                                        <h2 class="card-title">'. $post_info["title"] .'</h2>
-                                        <p class="card-text">'.nl2br($post_info["descriptions"]).'</p>
-                                        <a class="btn btn-primary" href="article.php?articlepage='.$post_info["id"].'">Read more →</a>';
+                                        '<div class="small text-muted">'. $feature[$a]['created'] .'</div>
+                                        <h2 class="card-title">'. $feature[$a]['title'] .'</h2>
+                                        <p class="card-text">'.nl2br($feature[$a]['descriptions']).'</p>
+                                        <a class="btn btn-primary" href="article.php?articlepage='.$feature[$a]['id'].'">Read more →</a>';
                                 }
                         ?>
                         </div>
                     </div>
                     <!-- Nested row for non-featured blog posts-->
-                    <?php
+                    
                      
-                    echo '<div class="row">
-                        <div class="col-lg-6">
-                            <!-- Blog post-->
-                            <div class="card mb-4">
-                                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                                <div class="card-body"> 
-                                    <div class="small text-muted">January 1, 2021</div>
-                                    <h2 class="card-title h4">Post Title</h2>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                    <a class="btn btn-primary" href="article.html">Read more →</a>
+                    <div class="row">
+                        <?php 
+                        for ($a=1; $a < count($feature); $a++){
+                            
+                            echo 
+                            '<div class="col-lg-6">
+                                <div class="card mb-4">
+                                    <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
+                                    <div class="card-body"> 
+                                        <div class="small text-muted">'.$feature[$a]['created'].'</div>
+                                        <h2 class="card-title h4">'.$feature[$a]['title'].'</h2>
+                                        <p class="card-text">'.nl2br($feature[$a]['descriptions']).'</p>
+                                        <a class="btn btn-primary" href="article.php?articlepage='.$feature[$a]['id'].'">Read more →</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- Blog post-->
-                            <div class="card mb-4">
-                                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                                <div class="card-body">
-                                    <div class="small text-muted">January 1, 2021</div>
-                                    <h2 class="card-title h4">Post Title</h2>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                    <a class="btn btn-primary" href="article.html">Read more →</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <!-- Blog post-->
-                            <div class="card mb-4">
-                                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                                <div class="card-body">
-                                    <div class="small text-muted">January 1, 2021</div>
-                                    <h2 class="card-title h4">Post Title</h2>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla.</p>
-                                    <a class="btn btn-primary" href="article.html">Read more →</a>
-                                </div>
-                            </div>
-                            <!-- Blog post-->
-                            <div class="card mb-4">
-                                <a href="#!"><img class="card-img-top" src="https://dummyimage.com/700x350/dee2e6/6c757d.jpg" alt="..." /></a>
-                                <div class="card-body">
-                                    <div class="small text-muted">January 1, 2021</div>
-                                    <h2 class="card-title h4">Post Title</h2>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis aliquid atque, nulla? Quos cum ex quis soluta, a laboriosam.</p>
-                                    <a class="btn btn-primary" href="article.html">Read more →</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>';
+                            </div>';
 
-                    ?>
+                        }
+                        ?>
+                        
+                    
+                        
+                    </div>
+                    
+                        
+                    
+                    
+
+                    
                     <!-- Pagination-->
                     <nav aria-label="Pagination">
                         <hr class="my-0" />

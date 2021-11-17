@@ -185,7 +185,7 @@ class Database {
         $data = new Database('blog_post');
         $column = "id, title, descriptions, created";
 
-        return $data->select($column,$data->tableName,'','ORDER BY created DESC','Limit 1',''); 
+        return $data->select($column,$data->tableName,'','ORDER BY created DESC','Limit 5',''); 
     }
 
 
