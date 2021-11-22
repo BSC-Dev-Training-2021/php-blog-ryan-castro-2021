@@ -1,3 +1,8 @@
+<?php
+require_once ('controller/class.php');
+$data = new Database('');
+
+?>  
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -46,7 +51,7 @@
                             </header>
                             <!-- Post content-->
                             <section class="mb-5">
-                                <form>
+                                <form method="post">
                                     <div class="form-group">
                                         <label for="formGroupExampleInput" class="mb-1">Full Name</label>
                                         <input type="text" class="form-control mb-1" id="formGroupExampleInput" placeholder="">
@@ -59,7 +64,7 @@
                                         <label for="exampleFormControlTextarea1" class="mb-1">Message</label>
                                         <textarea class="form-control mb-1" id="exampleFormControlTextarea1" rows="3"></textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary mt-2">Submit</button>
+                                    <button type="submit" name="submit" class="btn btn-primary mt-2">Submit</button>
                                 </form>
                             </section>
                         </div>

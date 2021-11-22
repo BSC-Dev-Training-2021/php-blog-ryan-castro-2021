@@ -1,9 +1,5 @@
 <?php
 require_once ('controller/class.php');
-
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

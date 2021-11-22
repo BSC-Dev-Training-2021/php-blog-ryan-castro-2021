@@ -26,9 +26,9 @@ class Database {
         }
     }
 
-    public function select($column_name, $table_name ,$where, $condition, $limit){
+    public function select($column_name, $table_name, $innerjoin ,$where, $orderby, $limit, $offset){
         $arrays = array();  
-        $query = "SELECT ". $column_name ." FROM ".$table_name." ".$where." ". $condition." ".$limit;
+        $query = "SELECT ". $column_name ." FROM ".$table_name." ".$innerjoin." ".$where." ". $orderby." ".$limit." ".$offset;
         $result = mysqli_query($this->con, $query);
         while($row = mysqli_fetch_assoc($result))
         {
@@ -48,7 +48,6 @@ class Database {
             echo 'Database Connection Error ' . mysqli_connect_error($this->con);
         }
     }
-
     
     public function update ($table_name, $fields, $where) {
         $query = '';
@@ -72,6 +71,28 @@ class Database {
             echo 'Database Connection Error ' . mysqli_connect_error($this->con);
         }
     }
+
+    public function innerjoin($tableName,$colummID, $toColummID) {
+        return $innerjoin = "INNER JOIN ". $tableName ." ON ". $colummID ." = ".$toColummID." ";
+    }
+
+    public function where($columm, $value) {
+        return $where = "WHERE ".$columm." = '".$value ."' ";
+    }
+
+    public function orderby($columm, $value) {
+        return $orderby = "ORDER BY ". $columm ." ". $value ." ";
+    }
+
+    public function limit($value) {
+        return $limit = " Limit ".$value." ";
+    }
+
+    // public function offset($value) {
+    //     return $offset = " Offset ".$value." ";
+    // }
+
+    
 
 
     // public function deletelist(){
@@ -123,32 +144,24 @@ class Database {
     // }
 
     
-    
+
     //user id and name
     public function select_user_info(){
         $data = new Database('users');
+        $where = $data->where('id','1');
     
-        return $data->select('*',$data->tableName,'WHERE id=1','','',''); 
-
-        // foreach($users_data as $user){
-        //     $_SESSION['$my_id'] = $user["id"];
-        //     // $_SESSION['$my_name']= $user["name"]; 
-
-        // }
-
+        return $data->select('*',$data->tableName,$where,'','','',''); 
     }
 
     public function select_categories(){
         $data = new Database('category_types');
     
-        return $data->select('*',$data->tableName,'','','',''); 
+        return $data->select('*',$data->tableName,'','','','',''); 
 
     }
 
-
     public function insert_post(){
             $data = new Database('blog_post');
-        
             $user_info = $data->select_user_info();
 
             $insert_data = array(
@@ -161,10 +174,11 @@ class Database {
 
             if($data->insert($data->tableName , $insert_data)){
                 $data = new Database('blog_post');
-                $post_info = $data->select('id',$data->tableName,'ORDER BY id DESC','','LIMIT 1',''); 
+                $orderby = $data->orderby('id','DESC');
+                $limit = $data->limit('1');
 
+                $post_info = $data->select('id',$data->tableName,'',$orderby,'',$limit,''); 
                 $my_post_id = $post_info[0]["id"];
-
                 $data = new Database('blog_post_categories');
                 
                 for ($a=0; $a<count($_POST['categories']); $a++){
@@ -184,56 +198,44 @@ class Database {
     public function select_feature_post(){
         $data = new Database('blog_post');
         $column = "id, title, descriptions, created";
+        $orderby = $data->orderby('created','DESC');
+        $limit = $data->limit('5');
 
-        return $data->select($column,$data->tableName,'','ORDER BY created DESC','Limit 5',''); 
+        return $data->select($column,$data->tableName,'','',$orderby,$limit,''); 
     }
 
 
     public function article_info(){
-
         $data = new Database('blog_post');
+        $column = "blog_post.contents, blog_post.title , blog_post.created, users.name ";    
+        $innerjoin = $data->innerjoin('users','blog_post.created_by','users.id');
+        $where = $data->where('blog_post.id',intval($_GET['articlepage']));
 
-        $column = "blog_post.contents, blog_post.title , blog_post.created, users.name ";
-
-        $innerjoin = "INNER JOIN users ON blog_post.created_by = users.id";
-
-        $where = "WHERE blog_post.id = ". intval($_GET['articlepage']);
-
-        return $data->select($column,$data->tableName,$innerjoin,$where,'',''); 
+        return $data->select($column,$data->tableName,$innerjoin,$where,'','',''); 
     }
 
     public function article_categories(){
-
         $data = new Database('blog_post_categories');
-
         $column = "category_types.name ";
+        $innerjoin = $data->innerjoin('category_types','blog_post_categories.category_id','category_types.id');
+        $where = $data->where('blog_post_categories.blog_post_id',intval($_GET['articlepage']));
 
-        $innerjoin = "INNER JOIN category_types ON blog_post_categories.category_id = category_types.id ";
-
-        $where = "WHERE blog_post_categories.blog_post_id = ". intval($_GET['articlepage']);
-
-        return $data->select($column,$data->tableName,$innerjoin,$where,'',''); 
+        return $data->select($column,$data->tableName,$innerjoin,$where,'','',''); 
     }
 
     public function select_comment(){
-
         $data = new Database('blog_post_comment');
-
         $column = "blog_post_comment.comment , users.name ";
+        $innerjoin = $data->innerjoin('users','blog_post_comment.user_id','users.id') . $data->innerjoin('blog_post','blog_post_comment.blog_post_id','blog_post.id');
+        $where = $data->where('blog_post.id',intval($_GET['articlepage']));
+        $orderby = $data->orderby('blog_post_comment.id','DESC');
 
-        $innerjoin = "inner join users on blog_post_comment.user_id = users.id INNER join blog_post on blog_post_comment.blog_post_id = blog_post.id ";
-
-        $where = "where blog_post.id = ". intval($_GET['articlepage']);
-
-        $orderby = "ORDER BY blog_post_comment.id DESC";
-
-        return $data->select($column,$data->tableName,$innerjoin,$where,$orderby,''); 
+        return $data->select($column,$data->tableName,$innerjoin,$where,$orderby,'',''); 
     }
 
     public function insert_comment(){
-        $data = new Database('blog_post_comment');
-                      
-            $user_info = $data->select_user_info();
+        $data = new Database('blog_post_comment');      
+        $user_info = $data->select_user_info();
 
             $insert_data = array(
                 'comment' => $_POST["comment_txt"],

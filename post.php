@@ -9,6 +9,7 @@ if (isset($_POST['submit'])){
     if (isset($_POST['categories'])){
         $data->insert_post();
         header('Location: index.php'); 
+
     }
     else{
         echo '<script type="text/javascript">';
