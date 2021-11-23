@@ -32,6 +32,8 @@ if (isset($_POST['submit'])){
         <title>Blog Post - Start Bootstrap Template</title>
         <script src="js/jquery-3.6.0.min.js"></script>
         <script src="js/app.js"></script>
+        <script src="bootstrap.bundle.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Core theme CSS (includes Bootstrap)-->
@@ -50,6 +52,15 @@ if (isset($_POST['submit'])){
                         <li class="nav-item"><a class="nav-link" href="about.php">About</a></li>
                         <li class="nav-item"><a class="nav-link" href="contact.php">Contact</a></li>
                         <li class="nav-item"><a class="nav-link active" href="post.php">Post</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarScrollingDropdown" role="button" data-toggle="dropdown" aria-expanded="false">
+                                Admin
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+                                <li><button type="button" class="btn float-right ml-1" data-toggle="modal" data-target="#categoriesModal">Categories</button></li>
+                                <li><a class="dropdown-item" href="#">Users</a></li>
+                            </ul>
+                        </li>
                         <li class="nav-item"><a class="nav-link" href="messages.php"><i class="fa fa-envelope-o"></i></a></li>
                     </ul>
                 </div>
@@ -150,6 +161,124 @@ if (isset($_POST['submit'])){
                 </div>
             </div>
         </div>
+
+        <section>
+            <div class="modal" id="categoriesModal" tabindex="-1" data-backdrop="static">
+                <div class="modal-dialog">
+                    <div class="modal-content modal-dialog-centered">
+                        <div class="modal-header">
+                            <form class="row">
+                                <h5 class="modal-title">Category Crud</h5>
+                                <button type="button" id="addCategorybtn" class="btn btn-light">Add</button>
+                                <button type="button" id="updateCategorybtn" class="btn btn-light">Update</button>
+                                <button type="button" id="deleteCategorybtn" class="btn btn-light">Delete</button>
+                            </form>
+                        </div>
+                        <div class="modal-body modal-dialog-scrollable">
+                            
+                            <form id="addCategoryForm" method="post">
+                                <h5 class="modal-title">Add New Category</h5>
+                                <input type="text" class="btn-light" name="addCategorytxt">
+                                <input type="submit" class="btn btn-primary" value="Add" name="addCategory">
+                            </form>
+
+                            <form id="updateCategotyForm">
+                            <h5 class="modal-title">Update Category</h5>
+                            <ul class="list-group list-group-flush">
+                                
+                                <?php 
+                            
+                                $categories = $data->select_categories();
+                                for ($a=0; $a < count($categories); $a++){                                                                                  
+                                ?>    
+                                <li class="list-group-item" class="">
+                                    <button type="button" id="updatebtn"  update_name="<?php echo $categories[$a]["name"]; ?>" update_id="<?php echo $categories[$a]["id"];?>" class="btn btn-light fa fa-check float-right" data-toggle="modal" data-target="#updateConfirmModal" data-dismiss="modal"></button>
+                                    <?php echo $categories[$a]["name"]; ?>
+                                </li>
+                                <?php 
+                                }
+                                ?>
+                            </ul>
+                            </form>
+
+                            <form id="deleteCategotyForm">
+                            <h5 class="modal-title">Delete Category</h5>
+                            <ul class="list-group list-group-flush">
+                                
+                                <?php 
+                        
+                                for ($a=0; $a < count($categories); $a++){                                                                                  
+                                ?>    
+                                <li class="list-group-item" class="">
+                                    <button type="button" id="deletebtn"  delete_name="<?php echo $categories[$a]["name"]; ?>" delete_id="<?php echo $categories[$a]["id"];?>" class="btn btn-light fa fa-trash-o float-right ml-1" data-toggle="modal" data-target="#deleteConfirmModal" data-dismiss="modal"></button>
+                                    <?php echo $categories[$a]["name"]; ?>
+                                </li>
+                                <?php 
+                                }
+                                ?>
+                            </ul>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section>
+            <div class="modal" id="deleteConfirmModal" tabindex="-1" data-backdrop="static">
+                <form method="POST" action="">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Delete Category?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to delete this "<span id="delete_name_span"></span>" Category?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="text" name="todo_id_txt" id="todo_id_txt" hidden>
+                                <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                                <button type="submit" name="detele_btn_confirm" class="btn btn-primary">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section>
+            <div class="modal" id="updateConfirmModal" tabindex="-1" data-backdrop="static">
+                <form method="POST" action="">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Update Category?</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to Update this "<span id="update_name_span"></span>" Category?</p>
+                                <input type="text" name="update_todo_name_txt" id="update_todo_name_txt" required>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="text" name="update_todo_id_txt" id="update_todo_id_txt" hidden>
+                                <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                                <button type="submit" name="update_btn_confirm" class="btn btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
         <!-- Footer-->
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">Copyright &copy; Your Website 2021</p></div>

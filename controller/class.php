@@ -95,23 +95,7 @@ class Database {
     
 
 
-    // public function deletelist(){
-    //     $data = new Database('todolist');
-    //     if (empty($_GET['ID']) and empty($_GET['pagination']))
-    //     {
-    //         header("location:index.php"); 
-    //     }
-
-    //     if (!empty($_GET['ID'])){
-    //         $id = intval($_GET['ID']);
-    //         echo $id;
-
-    //         if($data->delete($data->tableName, 'ID = '.$id))  
-    //         {  
-    //             header("location:index.php");  
-    //         }  
-    //     }
-    // }
+    
 
     // public function updatepagination(){
     //     $data = new Database('pagination');
@@ -129,19 +113,7 @@ class Database {
     //     }   
     // }
 
-    // public function updatelist(){
-    //     $data = new Database('todolist');
-    //     $update_data = array(  
-    //         'Status' => 'Completed',  
-    //     );  
-    //     $where_condition = array(  
-    //         'ID' => intval($_GET['completed'])
-    //     );  
-    //     if($data->update($data->tableName, $update_data, $where_condition))  
-    //     {  
-    //         header("location:index.php");  
-    //     }
-    // }
+    
 
     
 
@@ -247,6 +219,39 @@ class Database {
         $data->insert($data->tableName , $insert_data);
     }
 
+    public function delete_category(){
+        $data = new Database('category_types');
+
+        if (!empty($_POST['todo_id_txt'])){
+
+            $data->delete($data->tableName, 'id = '.$_POST['todo_id_txt']); 
+        }
+    }
+
+    public function insert_category(){
+        $data = new Database('category_types');
+        $user_info = $data->select_user_info();
+
+        $insert_data = array(
+            'name' => $_POST["addCategorytxt"],
+        );
+
+        $data->insert($data->tableName , $insert_data);
+
+    }
+
+    public function update_category(){
+        $data = new Database('category_types');
+
+        $update_data = array(  
+            'name' => $_POST['update_todo_name_txt'],  
+        );  
+        $where_condition = array(  
+            'id' => $_POST['update_todo_id_txt']
+        );  
+        $data->update($data->tableName, $update_data, $where_condition);
+
+    }
 } 
 
 ?>
