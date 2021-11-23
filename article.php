@@ -2,20 +2,6 @@
 require_once ('controller/class.php');
 $data = new Database('');
 
-if($_GET['articlepage']){
-    $article_data = $data->article_info();
-    foreach($article_data as $article_info){
-        $post_title = $article_info["title"];
-        $post_content = $article_info["contents"];
-        $post_datetime = $article_info["created"];
-        $post_name = $article_info["name"];
-    }
-}
-else
-{
-    header('Location: index.php'); 
-}
-
 if(isset($_POST['submit_comment'])){
     $data->insert_comment();
 }
@@ -29,6 +15,20 @@ if (isset($_POST['addCategory'])){
 }
 if (isset($_POST['update_btn_confirm'])){  
     $data->update_category();
+}
+
+if($_GET['articlepage']){
+    $article_data = $data->article_info();
+    foreach($article_data as $article_info){
+        $post_title = $article_info["title"];
+        $post_content = $article_info["contents"];
+        $post_datetime = $article_info["created"];
+        $post_name = $article_info["name"];
+    }
+}
+else
+{
+    header('Location: index.php'); 
 }
 
 
