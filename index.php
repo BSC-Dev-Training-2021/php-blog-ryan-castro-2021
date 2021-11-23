@@ -1,5 +1,17 @@
 <?php
 require_once ('controller/class.php');
+$data = new Database('');
+
+if (isset($_POST['detele_btn_confirm'])){  
+    $data->delete_category();
+}
+
+if (isset($_POST['addCategory'])){  
+    $data->insert_category();
+}
+if (isset($_POST['update_btn_confirm'])){  
+    $data->update_category();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -64,7 +76,7 @@ require_once ('controller/class.php');
                         <a href="#!"><img class="card-img-top" src="https://dummyimage.com/850x350/dee2e6/6c757d.jpg" alt="..." /></a>
                         <div class="card-body">
                             <?php
-                                $data = new Database('');
+                                
 
                                 $feature = $data->select_feature_post();
                                 for ($a=0; $a<1; $a++){

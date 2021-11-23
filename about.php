@@ -4,8 +4,7 @@ require_once ('controller/class.php');
 $data = new Database('');
 
 if (isset($_POST['detele_btn_confirm'])){  
-    // $data->delete_category();
-    echo $_POST['todo_id_txt'];
+    $data->delete_category();
 }
 
 if (isset($_POST['addCategory'])){  
@@ -14,10 +13,7 @@ if (isset($_POST['addCategory'])){
 if (isset($_POST['update_btn_confirm'])){  
     $data->update_category();
 }
-
-
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
     <head>

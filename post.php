@@ -21,6 +21,18 @@ if (isset($_POST['submit'])){
               </script>';
     }
 }
+
+if (isset($_POST['detele_btn_confirm'])){  
+    $data->delete_category();
+}
+
+if (isset($_POST['addCategory'])){  
+    $data->insert_category();
+}
+if (isset($_POST['update_btn_confirm'])){  
+    $data->update_category();
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
