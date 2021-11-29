@@ -6,11 +6,10 @@ $data = new Database('');
 if (isset($_POST['detele_btn_confirm'])){  
     $data->delete_category();
 }
-
-if (isset($_POST['addCategory'])){  
+else if (isset($_POST['addCategory'])){  
     $data->insert_category();
 }
-if (isset($_POST['update_btn_confirm'])){  
+else if (isset($_POST['update_btn_confirm'])){  
     $data->update_category();
 }
 
@@ -144,7 +143,7 @@ if (isset($_POST['update_btn_confirm'])){
                     <div class="modal-content modal-dialog-centered">
                         <div class="modal-header">
                             <form class="row">
-                                <h5 class="modal-title">Category Crud</h5>
+                                <h5 class="modal-title">Categories</h5>
                                 <button type="button" id="addCategorybtn" class="btn btn-light">Add</button>
                                 <button type="button" id="updateCategorybtn" class="btn btn-light">Update</button>
                                 <button type="button" id="deleteCategorybtn" class="btn btn-light">Delete</button>
@@ -164,12 +163,12 @@ if (isset($_POST['update_btn_confirm'])){
                                 
                                 <?php 
                             
-                                $categories = $data->select_categories();
-                                for ($a=0; $a < count($categories); $a++){                                                                                  
+                                $category = $data->select_categories_crud();
+                                for ($a=0; $a < count($category); $a++){                                                                                  
                                 ?>    
                                 <li class="list-group-item" class="">
-                                    <button type="button" id="updatebtn"  update_name="<?php echo $categories[$a]["name"]; ?>" update_id="<?php echo $categories[$a]["id"];?>" class="btn btn-light fa fa-check float-right" data-toggle="modal" data-target="#updateConfirmModal" data-dismiss="modal"></button>
-                                    <?php echo $categories[$a]["name"]; ?>
+                                    <button type="button" id="updatebtn"  update_name="<?php echo $category[$a]["name"]; ?>" update_id="<?php echo $category[$a]["id"];?>" class="btn btn-light fa fa-edit float-right" data-toggle="modal" data-target="#updateConfirmModal" data-dismiss="modal"></button>
+                                    <?php echo $category[$a]["name"] . " (".$category[$a]['number_post'].") "; ?>
                                 </li>
                                 <?php 
                                 }
@@ -182,12 +181,20 @@ if (isset($_POST['update_btn_confirm'])){
                             <ul class="list-group list-group-flush">
                                 
                                 <?php 
-                        
-                                for ($a=0; $a < count($categories); $a++){                                                                                  
+                                
+                                for ($a=0; $a < count($category); $a++){ 
+                                                                                                                 
                                 ?>    
                                 <li class="list-group-item" class="">
-                                    <button type="button" id="deletebtn"  delete_name="<?php echo $categories[$a]["name"]; ?>" delete_id="<?php echo $categories[$a]["id"];?>" class="btn btn-light fa fa-trash-o float-right ml-1" data-toggle="modal" data-target="#deleteConfirmModal" data-dismiss="modal"></button>
-                                    <?php echo $categories[$a]["name"]; ?>
+                                <?php 
+                                    if ($category[$a]['number_post'] == 0){
+                                        echo '<button type="button" id="deletebtn"  delete_name="'. $category[$a]["name"] .'" delete_id="'. $category[$a]["id"] .'" class="btn btn-light fa fa-trash-o float-right ml-1" data-toggle="modal" data-target="#deleteConfirmModal" data-dismiss="modal"></button>';
+                                    }
+                                    else {
+                                        echo "(".$category[$a]['number_post'].") "; 
+                                    }
+                                     echo $category[$a]["name"]; 
+                                ?>
                                 </li>
                                 <?php 
                                 }
@@ -197,7 +204,7 @@ if (isset($_POST['update_btn_confirm'])){
 
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
                         </div>
                     </div>
                 </div>

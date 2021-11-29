@@ -85,17 +85,12 @@ class Database {
     }
 
     public function limit($value) {
-        return $limit = " Limit ".$value." ";
+        return $limit = "Limit ".$value." ";
     }
 
-    // public function offset($value) {
-    //     return $offset = " Offset ".$value." ";
-    // }
-
-    
-
-
-    
+    public function offset($value) {
+        return $offset = "Offset ".$value." ";
+    }
 
     // public function updatepagination(){
     //     $data = new Database('pagination');
@@ -113,10 +108,6 @@ class Database {
     //     }   
     // }
 
-    
-
-    
-
     //user id and name
     public function select_user_info(){
         $data = new Database('users');
@@ -128,7 +119,34 @@ class Database {
     public function select_categories(){
         $data = new Database('category_types');
     
-        return $data->select('*',$data->tableName,'','','','',''); 
+        return $categories = $data->select('*',$data->tableName,'','','','',''); 
+    }
+
+    public function select_categories_crud(){
+        $data = new Database('category_types');
+    
+        $categories = $data->select('*',$data->tableName,'','','','',''); 
+        for ($a=0; $a < count($categories); $a++){
+
+            $data = new Database('blog_post_categories');
+
+            $where = $data->where('category_id',$categories[$a]['id']);
+
+            $categries_data = $data->select('*',$data->tableName,$where,'','','',''); 
+
+            $categories[$a]['number_post'] = count($categries_data);
+        }
+        return $categories;
+    }
+
+    public function select_blog_post_categories(){
+        $data = new Database('blog_post_categoryies');
+
+        
+        
+        $where = $data->where('category_id','');
+    
+        return $data->select('*',$data->tableName,$where,'','','',''); 
 
     }
 
@@ -230,7 +248,6 @@ class Database {
 
     public function insert_category(){
         $data = new Database('category_types');
-        $user_info = $data->select_user_info();
 
         $insert_data = array(
             'name' => $_POST["addCategorytxt"],
@@ -246,10 +263,10 @@ class Database {
         $update_data = array(  
             'name' => $_POST['update_todo_name_txt'],  
         );  
-        $where_condition = array(  
+        $where = array(  
             'id' => $_POST['update_todo_id_txt']
         );  
-        $data->update($data->tableName, $update_data, $where_condition);
+        $data->update($data->tableName, $update_data, $where);
 
     }
 } 
